@@ -240,8 +240,9 @@
                             </#if>
                         </td>
                         <td class="small">
-                            <span class="hidden">${component.attributes.jenkinsStatus!''}</span> 
-                            <a href="${component.attributes.jenkinsJobBuildUrl!''}"><img src="${component.attributes.jenkinsJobBadgeIconUrl!''}"></a>
+                            <#if component.attributes.jenkinsJobBadgeIconUrl??>
+                        	    <img src="${component.attributes.jenkinsJobBadgeIconUrl}" alt="status">
+                            </#if>
                         </td>
                         <td>
                             <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}" title="JIRA">
