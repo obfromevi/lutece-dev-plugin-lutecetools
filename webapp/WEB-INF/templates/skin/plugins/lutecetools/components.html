@@ -451,25 +451,36 @@
 </div>
 </div>
 <script>
-$(document).ready(function(){
-    
-  // Remove the container class to use the full width
-  $( "div" ).removeClass( "container" );
-  
-  // Refresh the page every 30s
-  var time = new Date().getTime();
-  $(document.body).bind("mousemove keypress", function(e) {
-    time = new Date().getTime();
-  });
+$(document).ready(function() {
+    // Remove the container class to use the full width
+    $("main").removeClass("container");
 
-  function refresh() {
-    if(new Date().getTime() - time >= 30000 && ${components_list.percentAvailable} < 100)
-      window.location.reload(true);
-    else
-      setTimeout(refresh, 10000);
-  }
-  setTimeout(refresh, 10000);
-  $("#components-table").tablesorter();
-  }
-);
+    // Toggle extra branches display
+    $(".see-more").on("click", function() {
+        const extraBranches = $(this).prev(".extra-branches");
+        if (extraBranches.is(":visible")) {
+            extraBranches.hide();
+            $(this).text('${i18n("lutecetools.components.branches.seeMore")}');
+        } else {
+            extraBranches.show();
+            $(this).text('${i18n("lutecetools.components.branches.seeLess")}');
+        }
+    });
+
+    // Refresh the page every 30s
+    var time = new Date().getTime();
+    $(document.body).bind("mousemove keypress", function(e) {
+        time = new Date().getTime();
+    });
+
+    function refresh() {
+        if(new Date().getTime() - time >= 30000 && ${components_list.percentAvailable} < 100)
+            window.location.reload(true);
+        else
+            setTimeout(refresh, 10000);
+    }
+    setTimeout(refresh, 10000);
+    $("#components-table").tablesorter();
+});
+
 </script>
