@@ -56,7 +56,7 @@ public class StatsService
         ComponentsInfos ci = MavenRepoService.instance( ).getComponents( );
         int nGithubCount = 0;
         int nGithubOK = 0;
-        int nJiraOK = 0;
+        int nRedmineOK = 0;
         for ( Component component : ci.getListComponents( ) )
         {
             if ( component.getInt( AbstractGitPlatformService.GIT_REPO_STATUS ) > 0 )
@@ -67,15 +67,15 @@ public class StatsService
                     nGithubOK++;
                 }
             }
-            if ( component.getInt( JiraService.JIRA_STATUS ) > 1 )
+            if ( component.getInt( RedmineService.REDMINE_STATUS ) > 1 )
             {
-                nJiraOK++;
+                nRedmineOK++;
             }
         }
         stats.setMavenCount( ci.getComponentCount( ) );
         stats.setGithubCount( nGithubCount );
         stats.setGithubOK( nGithubOK );
-        stats.setJiraOK( nJiraOK );
+        stats.setRedmineOK( nRedmineOK );
         return stats;
     }
 

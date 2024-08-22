@@ -4,9 +4,6 @@
 <#assign gitlabOk = 0 />
 <#assign gitlabWarning = 0 />
 <#assign gitlabDanger = 0 />
-<#assign jiraOk = 0 />
-<#assign jiraWarning = 0 />
-<#assign jiraDanger = 0 />
 <#assign RCIOk = 0 />
 <#assign RCIWarning = 0 />
 <#assign RCIDanger = 0 />
@@ -120,10 +117,6 @@
                 <canvas id="pieChart2" width="0"></canvas>
             </#if>
             <div class="col-md-2">
-                <h4><i class="fa fa-jira"> </i> Jira</h4>
-                <canvas id="pieChart3" width="250"></canvas>
-            </div>
-            <div class="col-md-2">
                 <h4><i class="fa fa-sonar"></i> Sonar</h4>
                 <canvas id="pieChart5" width="250"></canvas>
             </div>
@@ -142,7 +135,7 @@
                         </#if>
                         <th id="5">Sonar</th>
                         <th>&nbsp;</th>
-                        <th colspan="3" id="6">Jira</th>
+                        <th colspan="2" id="6">Redmine</th>
                         <th id="7">Jenkins</th>
                         <th id="8">#i18n{lutecetools.components.labelLinks}</th>
                     </tr>
@@ -159,8 +152,8 @@
                         </#if>
                         <th class="small" id="16">Lines of code</th>
                         <th class="small" id="17">QA</th>
-                        <th class="small" id="18">Status</th>
-                        <th class="small" colspan="2" id="19">Roadmap</th>
+                        <th class="small" id="18">Open issues</th>
+                        <th class="small" id="19">Closed issues</th>
                         <th class="small" id="20">Build status</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -266,45 +259,10 @@
                             </#attempt>
                         </td>
                         <td>
-                            <#if component.attributes.jiraStatus ??>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}">
-                            <#if component.attributes.jiraStatus == 0 >
-                                <span class="hidden">1</span>
-                                <img src="images/skin/plugins/lutecetools/jira-red.png" title="${component.attributes.jiraErrors!''}" alt="Jira status RED" width="24" height="24">
-                            	<#assign jiraDanger = jiraDanger + 1>
-                            </#if>
-                            <#if component.attributes.jiraStatus == 1 >
-                                <span class="hidden">2</span>
-                                <img src="images/skin/plugins/lutecetools/jira-orange.png" title="${component.attributes.jiraErrors!''}" alt="Jira status ORANGE" width="24" height="24">
-                            	<#assign jiraWarning = jiraWarning + 1>
-                            </#if>
-                            <#if component.attributes.jiraStatus == 2 >
-                                <span class="hidden">3</span>
-                                <img src="images/skin/plugins/lutecetools/jira-green.png" title="${component.attributes.jiraErrors!''}" alt="Jira status GREEN" width="24" height="24">
-                                <#assign jiraOk = jiraOk + 1>
-                            </#if>
-                            </a>
-                            </#if>
-                        </td>
-                        <td class="small">
-                            ${component.attributes.jiraLastUnreleasedVersion!"Not found"}
+                            ${component.attributes.redmineOpenIssuesCount!'0'}
                         </td>
                         <td>
-                            <#if component.attributes.jiraIssuesCount?? && component.attributes.jiraUnresolvedIssuesCount ??>
-                                <#assign fixed = component.attributes.jiraIssuesCount - component.attributes.jiraUnresolvedIssuesCount />
-                                <#assign unresolved = component.attributes.jiraUnresolvedIssuesCount />
-                            <#else>
-                                <#assign fixed = 0 />
-                                <#assign unresolved = 0 />
-                            </#if>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel" >
-                                <span class="label label-success"> ${fixed}</span>
-                                <#if unresolved == 0>
-                                    <span class="label label-success"> ${unresolved}</span>
-                                <#else>
-                                    <span class="label label-danger"> ${unresolved}</span>
-                                </#if>
-                            </a>
+                            ${component.attributes.redmineClosedIssuesCount!'0'}
                         </td>
                         <td class="small">
                             <#if component.attributes.jenkinsJobBadgeIconUrl??>
@@ -350,14 +308,6 @@
                         </div>
                         </#if>
                         <div class="col-md-2">
-                            <img src="images/skin/plugins/lutecetools/jira-green.png" alt="Jira status GREEN" width="20" height="20">
-                            <span class="badge"> ${jiraOk} </span> <br>
-                            <img src="images/skin/plugins/lutecetools/jira-orange.png" alt="Jira status ORANGE" width="20" height="20">
-                            <span class="badge"> ${jiraWarning} </span> <br>
-                            <img src="images/skin/plugins/lutecetools/jira-red.png" alt="Jira status RED" width="20" height="20">
-                            <span class="badge"> ${jiraDanger} </span> <br>
-                        </div>
-                        <div class="col-md-2">
                             <span class="fa fa-check-circle" style="color:#00b300;font-size:1.1em;"></span>
                             <span class="badge"> ${RCIOk} </span> <br>
                             <span class="fa fa-exclamation-circle" style="color:orange;"></span>
@@ -390,9 +340,6 @@
     <input type="hidden" id="valGitlabGreen" value="${gitlabOk}">
     <input type="hidden" id="valGitlabOrange" value="${gitlabWarning}">
     <input type="hidden" id="valGitlabRed" value="${gitlabDanger}">
-    <input type="hidden" id="valJiraGreen" value="${jiraOk}">
-    <input type="hidden" id="valJiraOrange" value="${jiraWarning}">
-    <input type="hidden" id="valJiraRed" value="${jiraDanger}">
     <input type="hidden" id="valRCIGreen" value="${RCIOk}">
     <input type="hidden" id="valRCIOrange" value="${RCIWarning}">
     <input type="hidden" id="valRCIRed" value="${RCIDanger}">

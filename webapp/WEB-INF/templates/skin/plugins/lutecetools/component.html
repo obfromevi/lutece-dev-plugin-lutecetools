@@ -4,9 +4,6 @@
 <#assign gitlabOk = 0 />
 <#assign gitlabWarning = 0 />
 <#assign gitlabDanger = 0 />
-<#assign jiraOk = 0 />
-<#assign jiraWarning = 0 />
-<#assign jiraDanger = 0 />
 <#assign RCIOk = 0 />
 <#assign RCIWarning = 0 />
 <#assign RCIDanger = 0 />
@@ -35,7 +32,7 @@
                         <th colspan="2" id="4">#i18n{lutecetools.components.labelCoreVersion}</th>
                         <th id="5">Sonar</th>
                         <th>&nbsp;</th>
-                        <th colspan="3" id="6">Jira</th>
+                        <th colspan="2" id="6">Redmine</th>
                         <th id="7">Jenkins</th>
                         <th id="8">#i18n{lutecetools.components.labelLinks}</th>
                     </tr>
@@ -50,8 +47,8 @@
                         <th class="small" id="15">Release</th>
                         <th class="small" id="16">Lines of code</th>
                         <th class="small" id="17">QA</th>
-                        <th class="small" id="18">Status</th>
-                        <th class="small" colspan="2" id="19">Roadmap</th>
+                        <th class="small" id="18">Open issues</th>
+                        <th class="small" id="19">Closed issues</th>
                         <th class="small" id="20">Build status</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -158,46 +155,12 @@
                             </#attempt>
                         </td>
                         <td>
-                            <#if component.attributes.jiraStatus ??>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}">
-                            <#if component.attributes.jiraStatus == 0 >
-                                <span class="hidden">1</span>
-                                <img src="images/skin/plugins/lutecetools/jira-red.png" title="${component.attributes.jiraErrors!''}" alt="Jira status RED" width="24" height="24">
-                            	<#assign jiraDanger = jiraDanger + 1>
-                            </#if>
-                            <#if component.attributes.jiraStatus == 1 >
-                                <span class="hidden">2</span>
-                                <img src="images/skin/plugins/lutecetools/jira-orange.png" title="${component.attributes.jiraErrors!''}" alt="Jira status ORANGE" width="24" height="24">
-                            	<#assign jiraWarning = jiraWarning + 1>
-                            </#if>
-                            <#if component.attributes.jiraStatus == 2 >
-                                <span class="hidden">3</span>
-                                <img src="images/skin/plugins/lutecetools/jira-green.png" title="${component.attributes.jiraErrors!''}" alt="Jira status GREEN" width="24" height="24">
-                                <#assign jiraOk = jiraOk + 1>
-                            </#if>
-                            </a>
-                            </#if>
-                        </td>
-                        <td class="small">
-                            ${component.attributes.jiraLastUnreleasedVersion!"Not found"}
+                            ${component.attributes.redmineOpenIssuesCount!'0'}
                         </td>
                         <td>
-                            <#if component.attributes.jiraIssuesCount?? && component.attributes.jiraUnresolvedIssuesCount ??>
-                                <#assign fixed = component.attributes.jiraIssuesCount - component.attributes.jiraUnresolvedIssuesCount />
-                                <#assign unresolved = component.attributes.jiraUnresolvedIssuesCount />
-                            <#else>
-                                <#assign fixed = 0 />
-                                <#assign unresolved = 0 />
-                            </#if>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel" >
-                                <span class="label label-success"> ${fixed}</span>
-                                <#if unresolved == 0>
-                                    <span class="label label-success"> ${unresolved}</span>
-                                <#else>
-                                    <span class="label label-danger"> ${unresolved}</span>
-                                </#if>
-                            </a>
+                            ${component.attributes.redmineClosedIssuesCount!'0'}
                         </td>
+
                         <td class="small">
                             <#if component.attributes.jenkinsJobBadgeIconUrl??>
                         	    <img src="${component.attributes.jenkinsJobBadgeIconUrl}" alt="status">
