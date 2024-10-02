@@ -7,8 +7,6 @@
 <#assign jiraOk = 0 />
 <#assign jiraWarning = 0 />
 <#assign jiraDanger = 0 />
-<#assign readmeOk = 0 />
-<#assign readmeDanger = 0 />
 <#assign RCIOk = 0 />
 <#assign RCIWarning = 0 />
 <#assign RCIDanger = 0 />
@@ -21,7 +19,7 @@
     <@messages infos=infos />
     <h1>#i18n{lutecetools.components.title}</h1>
 
-    
+
     <br>
     <#if !components_list.complete>
     <h3>
@@ -41,7 +39,7 @@
                 <form method="GET" action="jsp/site/Portal.jsp">
                     <input type="hidden" name="page" value="components" />
                     <div class="col-md-3">
-                        <h4><i class="fa fa-filter"></i> #i18n{lutecetools.components.filterByPlatform}</h4> 
+                        <h4><i class="fa fa-filter"></i> #i18n{lutecetools.components.filterByPlatform}</h4>
                     </div>
                     <div class="col-md-3">
                         <input type="checkbox" name="github" <#if github_filter> checked </#if> />  GitHub<br>
@@ -126,10 +124,6 @@
                 <canvas id="pieChart3" width="250"></canvas>
             </div>
             <div class="col-md-2">
-                <h4><i class="fa fa-markdown"></i> Readme</h4>
-                <canvas id="pieChart4" width="250"></canvas>
-            </div>
-            <div class="col-md-2">
                 <h4><i class="fa fa-sonar"></i> Sonar</h4>
                 <canvas id="pieChart5" width="250"></canvas>
             </div>
@@ -141,7 +135,7 @@
                 <thead>
                     <tr>
                         <th id="1">#i18n{lutecetools.components.labelComponent}</th>
-                        <th colspan="5" id="2">#i18n{lutecetools.components.labelRepository}</th>
+                        <th colspan="4" id="2">#i18n{lutecetools.components.labelRepository}</th>
                         <th colspan="2" id="3">#i18n{lutecetools.components.labelVersion}</th>
                         <th colspan="2" id="4">#i18n{lutecetools.components.labelParentPomVersion}</th>
                         <#if core_versions>
@@ -158,21 +152,20 @@
                         <th class="small" id="11">Status</th>
                         <th class="small" id="12">Organization</th>
                         <th class="small" id="13">Branches</th>
-                        <th class="small" id="14">Readme</th>
-                        <th class="small" id="15">Pull Request</th>
-                        <th class="small" id="16">Snapshot</th>
-                        <th class="small" id="17">Release</th>
-                        <th class="small" id="18">Snapshot</th>
-                        <th class="small" id="19">Release</th>
+                        <th class="small" id="14">Pull Request</th>
+                        <th class="small" id="15">Snapshot</th>
+                        <th class="small" id="16">Release</th>
+                        <th class="small" id="17">Snapshot</th>
+                        <th class="small" id="18">Release</th>
                         <#if core_versions>
-                        <th class="small" id="20">Snapshot</th>
-                        <th class="small" id="21">Release</th>
+                        <th class="small" id="19">Snapshot</th>
+                        <th class="small" id="20">Release</th>
                         </#if>
-                        <th class="small" id="22">Lines of code</th>
-                        <th class="small" id="23">QA</th>
-                        <th class="small" id="24">Status</th>
-                        <th class="small" colspan="2" id="25">Roadmap</th>
-                        <th class="small" id="27">Build status</th>
+                        <th class="small" id="21">Lines of code</th>
+                        <th class="small" id="22">QA</th>
+                        <th class="small" id="23">Status</th>
+                        <th class="small" colspan="2" id="24">Roadmap</th>
+                        <th class="small" id="26">Build status</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -180,7 +173,7 @@
 
 		    <#list components_list.listComponents as component>
                     <tr class="component-box" data-component="${component.artifactId}">
-                        <td class="small"> 
+                        <td class="small">
                             <a href="jsp/site/Portal.jsp?page=components&view=detail&artifact_id=${component.artifactId}">${component.artifactId}</a></td>
                         <td>
                             <#if component.attributes.gitRepoStatus??>
@@ -188,7 +181,7 @@
 
                                 <#if component.attributes.snapshotScmUrl?? && component.attributes.isGitRepo >
                                     <a href="${component.attributes.snapshotScmUrl}">
-                                </#if>        
+                                </#if>
 
                                 <#if component.attributes.gitRepoStatus gt -1 && component.attributes.gitRepoStatus lt 3>
                                     <#if component.attributes.gitPlatform == "github"><#assign githubDanger = githubDanger + 1></#if>
@@ -207,7 +200,7 @@
                                 </#if>
                                 <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains("git")>
                                     </a>
-                                </#if>   
+                                </#if>
                             </#if>
                         </td>
                         <td class="small">${component.attributes.gitGroup!""}</td>
@@ -216,20 +209,6 @@
                                <#list component.attributes.branchesList as branch>
                                ${branch}<br>
                                </#list>
-                            </#if>
-                        </td>
-                        <td>
-                            <#if component.attributes.gitRepoStatus?? && component.attributes.hasReadme?? >
-                                <#if !component.attributes.hasReadme && component.attributes.gitRepoStatus gt 0>
-                                    <span class="hidden">1</span> 
-                                    <img src="images/skin/plugins/lutecetools/readme-red.png" title="Readme file missing" width="24" height="24" />
-                                    <#assign readmeDanger = readmeDanger +1 />
-                                </#if>
-                                <#if component.attributes.hasReadme && component.attributes.gitRepoStatus gt 0>
-                                    <span class="hidden">2</span> 
-                                    <img src="images/skin/plugins/lutecetools/readme-green.png" title="Readme file available" width="24" height="24" />
-                                    <#assign readmeOk = readmeOk +1 />
-                                </#if>
                             </#if>
                         </td>
                         <td>
@@ -291,7 +270,7 @@
                                         <span class="fa fa-exclamation-triangle" style="color:red;font-size:2em;"></span>
                                         <#assign RCIDanger = RCIDanger + 1>
                                 </#if>
-                                </a>                                
+                                </a>
                                 ${nb}
                                 <#recover>
                                 Not found
@@ -388,12 +367,6 @@
                             <span class="badge"> ${jiraDanger} </span> <br>
                         </div>
                         <div class="col-md-2">
-                            <img src="images/skin/plugins/lutecetools/readme-green.png" alt="Readme status GREEN" width="20" height="20">
-                            <span class="badge"> ${readmeOk} </span> <br>
-                            <img src="images/skin/plugins/lutecetools/readme-red.png" alt="Readme status RED" width="20" height="20">
-                            <span class="badge"> ${readmeDanger} </span> <br>
-                        </div>
-                        <div class="col-md-2">
                             <span class="fa fa-check-circle" style="color:#00b300;font-size:1.1em;"></span>
                             <span class="badge"> ${RCIOk} </span> <br>
                             <span class="fa fa-exclamation-circle" style="color:orange;"></span>
@@ -414,7 +387,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>		            
+                    </div>
                     <br />
                 </tboby>
             </table>
@@ -432,8 +405,6 @@
     <input type="hidden" id="valJiraGreen" value="${jiraOk}">
     <input type="hidden" id="valJiraOrange" value="${jiraWarning}">
     <input type="hidden" id="valJiraRed" value="${jiraDanger}">
-    <input type="hidden" id="valReadmeGreen" value="${readmeOk}">
-    <input type="hidden" id="valReadmeRed" value="${readmeDanger}">
     <input type="hidden" id="valRCIGreen" value="${RCIOk}">
     <input type="hidden" id="valRCIOrange" value="${RCIWarning}">
     <input type="hidden" id="valRCIRed" value="${RCIDanger}">
@@ -441,10 +412,10 @@
 </div>
 <script>
 $(document).ready(function(){
-    
+
   // Remove the container class to use the full width
   $( "div" ).removeClass( "container" );
-  
+
   // Refresh the page every 30s
   var time = new Date().getTime();
   $(document.body).bind("mousemove keypress", function(e) {

@@ -36,10 +36,12 @@ package fr.paris.lutece.plugins.lutecetools.service;
 import fr.paris.lutece.plugins.lutecetools.business.Component;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.models.GitlabProject;
 
@@ -83,7 +85,6 @@ public class GitLabService extends AbstractGitPlatformService
 
             component.set( GIT_REPO_STATUS, 4 ); // FIXME 4 = OK
             component.set( GIT_REPO_ERRORS, "" );
-            component.set( HAS_README, false );
 
             incrementItemCount( );
             incrementItemOk( );
@@ -110,7 +111,7 @@ public class GitLabService extends AbstractGitPlatformService
             }
 
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
             AppLogService.error( "GitlabService - Error getting repositories : " + ex.getMessage( ), ex );
         }
@@ -120,9 +121,10 @@ public class GitLabService extends AbstractGitPlatformService
 
     /**
      * Fetch all repositories hosted by the platform
-     * 
+     *
      * @return The repositories map
-     * @throws IOException if an error occurs
+     * @throws IOException
+     *         if an error occurs
      */
     public static Map<String, GitlabProject> getRepositories( ) throws IOException
     {
@@ -135,8 +137,7 @@ public class GitLabService extends AbstractGitPlatformService
         for ( GitlabProject project : listProjects )
         {
             String strGroup = getGroup( project );
-            AppLogService
-                    .debug( "GitlabService - fetching repository : " + project.getName( ) + " group : " + strGroup );
+            AppLogService.debug( "GitlabService - fetching repository : " + project.getName( ) + " group : " + strGroup );
             mapRepositories.put( project.getName( ), project );
         }
         return mapRepositories;
@@ -144,8 +145,9 @@ public class GitLabService extends AbstractGitPlatformService
 
     /**
      * Gets the group from a given GitLab project
-     * 
-     * @param project The project
+     *
+     * @param project
+     *         The project
      * @return The group
      */
     static String getGroup( GitlabProject project )
@@ -165,7 +167,8 @@ public class GitLabService extends AbstractGitPlatformService
     /**
      * fill site infos from xdox site index
      *
-     * @param component The component
+     * @param component
+     *         The component
      */
     private void fillSiteInfos( Component component, StringBuilder sbLogs )
     {
