@@ -218,30 +218,18 @@
                             </#if>
                         </td>
                         <td class="small">
-                            <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains(".git")>
-                            <a href="${component.attributes.snapshotScmUrl}">
-                                <img src="images/skin/plugins/lutecetools/${component.attributes.gitPlatform!''}.png" alt="GitHub logo" width="24" height="24">
-                            </a>
+                            <#if component.attributes.snapshotScmUrl??>
+                                <a href="${component.attributes.snapshotScmUrl}/tree/develop">
+                                    ${component.attributes.snapshotVersion!"Not found"}
+                                </a>
                             </#if>
-                            <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains("svn")>
-                            <a href="${component.attributes.snapshotScmUrl}">
-                                <img src="images/skin/plugins/lutecetools/subversion.png" alt="GitHub logo" width="24" height="24">
-                            </a>
-                            </#if>
-                            ${component.attributes.snapshotVersion!"Not found"}
                         </td>
                         <td class="small">
-                            <#if component.attributes.scmUrl?? && component.attributes.scmUrl?contains("git")>
-                            <a href="${component.attributes.scmUrl}">
-                                <img src="images/skin/plugins/lutecetools/${component.attributes.gitPlatform!''}.png" alt="GitHub logo" width="24" height="24">
-                            </a>
+                            <#if component.attributes.scmUrl??>
+                                <a href="${component.attributes.scmUrl}/tree/develop" >
+                                    ${component.version}
+                                </a>
                             </#if>
-                            <#if component.attributes.scmUrl?? && component.attributes.scmUrl?contains("svn")>
-                            <a href="${component.attributes.scmUrl}" >
-                                <img src="images/skin/plugins/lutecetools/subversion.png" alt="GitHub logo" width="24" height="24">
-                            </a>
-                            </#if>
-                            ${component.version}
                         </td>
                         <td class="small">${component.attributes.snapshotParentPomVersion!"Not found"}</td>
                         <td class="small">${component.attributes.parentPomVersion!"Not found"}</td>
