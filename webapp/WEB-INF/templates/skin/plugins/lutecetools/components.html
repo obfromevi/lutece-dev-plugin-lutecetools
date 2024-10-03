@@ -304,9 +304,11 @@
                             </#if>
                         </td>
                         <td>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}" title="JIRA">
-                                <img src="images/skin/plugins/lutecetools/jira.png" alt="Jira logo" width="24" height="24"/>
-                            </a>
+                            <#if component.attributes.jiraKey?has_content && component.attributes.jiraKey != "N/A">
+                                <a href="https://dev.lutece.paris.fr/bugtracker/projects/${component.attributes.jiraKey!?lower_case}" title="REDMINE">
+                                    <img src="images/skin/plugins/lutecetools/redmine.png" alt="Redmine logo" width="24" height="24"/>
+                                </a>
+                            </#if>
                             <a href="http://dev.lutece.paris.fr/plugins/${component.artifactId}/index.html" title="English" class="btn btn-default btn-xs">en</a>
                             <a href="http://dev.lutece.paris.fr/plugins/${component.artifactId}/fr/index.html" title="French" class="btn btn-default btn-xs">&nbsp;fr&nbsp;</a>
                             <a href="http://dev.lutece.paris.fr/nexus/service/rest/repository/browse/maven_repository/fr/paris/lutece/plugins/${component.artifactId}" title="Maven repository" class="btn btn-default btn-xs">
