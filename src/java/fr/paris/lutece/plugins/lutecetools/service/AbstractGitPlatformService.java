@@ -45,6 +45,8 @@ public abstract class AbstractGitPlatformService implements ComponentInfoFiller
     public static final String GIT_REPO_STATUS = "gitRepoStatus";
     public static final String OLDEST_PULL_REQUEST = "oldestPullRequest";
     public static final String BRANCHES_LIST = "branchesList";
+    public static final String EXTRA_BRANCHES = "extraBranches";
+    public static final String HAS_EXTRA_BRANCHES = "hasExtraBranches";
 
     private String _strGitPlatform;
     private int _nItemCount;

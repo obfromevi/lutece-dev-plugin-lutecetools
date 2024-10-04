@@ -120,13 +120,23 @@ public class GitHubService extends AbstractGitPlatformService
             component.set( GIT_PLATFORM, getGitPlatform( ) );
             Map<String, GHBranch> mapBranches = repo.getBranches( );
             List<String> listBranches = new ArrayList<>( );
+            List<String> extraBranches = new ArrayList<>( );
 
             for ( String strBranch : mapBranches.keySet( ) )
             {
-                listBranches.add( strBranch );
+                if ( "master".equals( strBranch ) || "develop".equals( strBranch ) )
+                {
+                    listBranches.add( strBranch );
+                }
+                else
+                {
+                    extraBranches.add( strBranch );
+                }
             }
 
             component.set( BRANCHES_LIST, listBranches );
+            component.set( EXTRA_BRANCHES, extraBranches );
+            component.set( HAS_EXTRA_BRANCHES, !extraBranches.isEmpty( ) );
         }
         catch( Exception ex )
         {

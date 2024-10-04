@@ -91,9 +91,17 @@
                         </td>
                         <td class="small">
                             <#if component.attributes.branchesList??>
-                               <#list component.attributes.branchesList as branch>
-                               ${branch}<br>
-                               </#list>
+                                <#list component.attributes.branchesList as branch>
+                                    ${branch}<br>
+                                </#list>
+                                <#if component.attributes.hasExtraBranches?? && component.attributes.hasExtraBranches>
+                                    <span class="extra-branches" style="display:none;">
+                                        <#list component.attributes.extraBranches as extraBranch>
+                                            ${extraBranch}<br>
+                                        </#list>
+                                    </span>
+                                    <span class="see-more" style="cursor:pointer; color:blue;">${i18n("lutecetools.components.branches.seeMore")}</span>
+                                </#if>
                             </#if>
                         </td>
                         <td>
@@ -273,3 +281,17 @@
 
 </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $(".see-more").on("click", function() {
+            const extraBranches = $(this).prev(".extra-branches");
+            if (extraBranches.is(":visible")) {
+                extraBranches.hide();
+                $(this).text('${i18n("lutecetools.components.branches.seeMore")}');
+            } else {
+                extraBranches.show();
+                $(this).text('${i18n("lutecetools.components.branches.seeLess")}');
+            }
+        });
+    });
+</script>
