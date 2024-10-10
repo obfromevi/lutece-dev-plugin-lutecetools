@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.lutecetools.service;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +66,10 @@ public class SonarService implements ComponentInfoFiller
     private static final String RESOURCE_LC_SONAR_JSON = AppPropertiesService.getProperty( PROPERTY_SONAR_JSON_LC_RESOURCE );
     private static final String PROPERTY_SONAR_JSON_PLUGINS_RESOURCE = "lutecetools.sonar.json.plugins.resource";
     private static final String RESOURCE_PLUGINS_SONAR_JSON = AppPropertiesService.getProperty( PROPERTY_SONAR_JSON_PLUGINS_RESOURCE );
-
+    private static final String PROPERTY_SONAR_USERNAME = "lutecetools.sonar.json.username";
+    private static final String SONAR_USERNAME = AppPropertiesService.getProperty( PROPERTY_SONAR_USERNAME );
+    private static final String PROPERTY_SONAR_PASSWORD = "lutecetools.sonar.json.password";
+    private static final String SONAR_PASSWORD = AppPropertiesService.getProperty( PROPERTY_SONAR_PASSWORD );
     // Tags
     private static final String TAG_LUTECE_CORE = "lutece-core";
 
@@ -114,7 +118,7 @@ public class SonarService implements ComponentInfoFiller
      * get metrics from Sonar Webservice
      *
      * @param strArtifactId
-     *            The ArtifactId
+     *         The ArtifactId
      * @return The metrics HashMap
      */
     public Map<String, String> getSonarMetrics( String strArtifactId )
@@ -133,7 +137,17 @@ public class SonarService implements ComponentInfoFiller
 
         try
         {
-            String strHtml = _httpAccess.doGet( sbJSONUrl.toString( ) );
+            // Add Basic Auth header
+            String auth = SONAR_USERNAME + ":" + SONAR_PASSWORD;
+            String encodedAuth = Base64.getEncoder( ).encodeToString( auth.getBytes( ) );
+            String authHeader = "Basic " + encodedAuth;
+            Map<String, String> headers = new HashMap<>( );
+            headers.put( "Authorization", authHeader );
+            headers.put( "Accept", "application/json" );
+
+            // Make the HTTP GET request
+            String strHtml = _httpAccess.doGet( sbJSONUrl.toString( ), null, null, headers );
+
             JSONObject json = new JSONObject( strHtml );
             JSONObject component = json.getJSONObject( KEY_COMPONENT );
 
