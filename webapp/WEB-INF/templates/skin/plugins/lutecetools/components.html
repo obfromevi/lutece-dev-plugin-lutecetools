@@ -7,8 +7,6 @@
 <#assign jiraOk = 0 />
 <#assign jiraWarning = 0 />
 <#assign jiraDanger = 0 />
-<#assign readmeOk = 0 />
-<#assign readmeDanger = 0 />
 <#assign RCIOk = 0 />
 <#assign RCIWarning = 0 />
 <#assign RCIDanger = 0 />
@@ -21,7 +19,7 @@
     <@messages infos=infos />
     <h1>#i18n{lutecetools.components.title}</h1>
 
-    
+
     <br>
     <#if !components_list.complete>
     <h3>
@@ -41,7 +39,7 @@
                 <form method="GET" action="jsp/site/Portal.jsp">
                     <input type="hidden" name="page" value="components" />
                     <div class="col-md-3">
-                        <h4><i class="fa fa-filter"></i> #i18n{lutecetools.components.filterByPlatform}</h4> 
+                        <h4><i class="fa fa-filter"></i> #i18n{lutecetools.components.filterByPlatform}</h4>
                     </div>
                     <div class="col-md-3">
                         <input type="checkbox" name="github" <#if github_filter> checked </#if> />  GitHub<br>
@@ -126,10 +124,6 @@
                 <canvas id="pieChart3" width="250"></canvas>
             </div>
             <div class="col-md-2">
-                <h4><i class="fa fa-markdown"></i> Readme</h4>
-                <canvas id="pieChart4" width="250"></canvas>
-            </div>
-            <div class="col-md-2">
                 <h4><i class="fa fa-sonar"></i> Sonar</h4>
                 <canvas id="pieChart5" width="250"></canvas>
             </div>
@@ -144,14 +138,13 @@
                         <th colspan="6" id="2">#i18n{lutecetools.components.labelRepository}</th>
                         <th colspan="3" id="3">#i18n{lutecetools.components.labelVersion}</th>
                         <#if core_versions>
-                            <th colspan="2" id="5">#i18n{lutecetools.components.labelCoreVersion}</th>
+                            <th colspan="2" id="4">#i18n{lutecetools.components.labelCoreVersion}</th>
                         </#if>
-                        <th id="6">Sonar</th>
+                        <th id="5">Sonar</th>
                         <th>&nbsp;</th>
-                        <th colspan="3" id="7">Jira</th>
-                        <th id="8">Release</th>
-                        <th id="9">Jenkins</th>
-                        <th id="10">#i18n{lutecetools.components.labelLinks}</th>
+                        <th colspan="3" id="6">Jira</th>
+                        <th id="7">Jenkins</th>
+                        <th id="8">#i18n{lutecetools.components.labelLinks}</th>
                     </tr>
                     <tr>
                         <th>&nbsp;</th>
@@ -177,7 +170,7 @@
 
 		    <#list components_list.listComponents as component>
                     <tr class="component-box" data-component="${component.artifactId}">
-                        <td class="small"> 
+                        <td class="small">
                             <a href="jsp/site/Portal.jsp?page=components&view=detail&artifact_id=${component.artifactId}">${component.artifactId}</a></td>
                         <td>
                             <#if component.attributes.gitRepoStatus??>
@@ -185,7 +178,7 @@
 
                                 <#if component.attributes.snapshotScmUrl?? && component.attributes.isGitRepo >
                                     <a href="${component.attributes.snapshotScmUrl}">
-                                </#if>        
+                                </#if>
 
                                 <#if component.attributes.gitRepoStatus gt -1 && component.attributes.gitRepoStatus lt 3>
                                     <#if component.attributes.gitPlatform == "github"><#assign githubDanger = githubDanger + 1></#if>
@@ -204,28 +197,21 @@
                                 </#if>
                                 <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains("git")>
                                     </a>
-                                </#if>   
-                            </#if>
-                        </td>
-                        <td class="small">${component.attributes.gitGroup!""}</td>
-                        <td class="small">
-                            <#if component.attributes.branchesList??>
-                               <#list component.attributes.branchesList as branch>
-                               ${branch}<br>
-                               </#list>
-                            </#if>
-                        </td>
-                        <td>
-                            <#if component.attributes.gitRepoStatus?? && component.attributes.hasReadme?? >
-                                <#if !component.attributes.hasReadme && component.attributes.gitRepoStatus gt 0>
-                                    <span class="hidden">1</span> 
-                                    <img src="images/skin/plugins/lutecetools/readme-red.png" title="Readme file missing" width="24" height="24" />
-                                    <#assign readmeDanger = readmeDanger +1 />
                                 </#if>
-                                <#if component.attributes.hasReadme && component.attributes.gitRepoStatus gt 0>
-                                    <span class="hidden">2</span> 
-                                    <img src="images/skin/plugins/lutecetools/readme-green.png" title="Readme file available" width="24" height="24" />
-                                    <#assign readmeOk = readmeOk +1 />
+                            </#if>
+                        </td>
+<td class="small">
+                            <#if component.attributes.branchesList??>
+                                <#list component.attributes.branchesList as branch>
+                                    ${branch}<br>
+                                </#list>
+                                <#if component.attributes.hasExtraBranches?? && component.attributes.hasExtraBranches>
+                                    <span class="extra-branches" style="display:none;">
+                                        <#list component.attributes.extraBranches as extraBranch>
+                                            ${extraBranch}<br>
+                                        </#list>
+                                    </span>
+                                    <span class="see-more" style="cursor:pointer; color:blue;">${i18n("lutecetools.components.branches.seeMore")}</span>
                                 </#if>
                             </#if>
                         </td>
@@ -238,36 +224,24 @@
                             </#if>
                         </td>
                         <td class="small">
-                            <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains(".git")>
-                            <a href="${component.attributes.snapshotScmUrl}">
-                                <img src="images/skin/plugins/lutecetools/${component.attributes.gitPlatform!''}.png" alt="GitHub logo" width="24" height="24">
-                            </a>
+                            <#if component.attributes.snapshotScmUrl??>
+                                <a href="${component.attributes.snapshotScmUrl}/tree/develop">
+                                    ${component.attributes.snapshotVersion!"Not found"}
+                                </a>
                             </#if>
-                            <#if component.attributes.snapshotScmUrl?? && component.attributes.snapshotScmUrl?contains("svn")>
-                            <a href="${component.attributes.snapshotScmUrl}">
-                                <img src="images/skin/plugins/lutecetools/subversion.png" alt="GitHub logo" width="24" height="24">
-                            </a>
-                            </#if>
-                            ${component.attributes.snapshotVersion!"Not found"}
                         </td>
                         <td class="small">
-                            <#if component.attributes.scmUrl?? && component.attributes.scmUrl?contains("git")>
-                            <a href="${component.attributes.scmUrl}">
-                                <img src="images/skin/plugins/lutecetools/${component.attributes.gitPlatform!''}.png" alt="GitHub logo" width="24" height="24">
-                            </a>
+                            <#if component.attributes.scmUrl??>
+                                <a href="${component.attributes.scmUrl}/tree/develop" >
+                                    ${component.version}
+                                </a>
                             </#if>
-                            <#if component.attributes.scmUrl?? && component.attributes.scmUrl?contains("svn")>
-                            <a href="${component.attributes.scmUrl}" >
-                                <img src="images/skin/plugins/lutecetools/subversion.png" alt="GitHub logo" width="24" height="24">
-                            </a>
-                            </#if>
-                            ${component.version}
                         </td>
                         <td class="small">
 	                        <#if component.attributes.lastReleaseDate?? && component.attributes.lastReleaseDate gt 0>
-								${component.attributes.lastReleaseDate?number_to_date}
-							</#if>
-						</td>
+								              ${component.attributes.lastReleaseDate?number_to_date}
+							            </#if>
+						            </td>
                         <#if core_versions>
                         <td class="small">${component.attributes.snapshotCoreVersion!"Not found"}</td>
                         <td class="small">${component.attributes.coreVersion!"Not found"}</td>
@@ -291,7 +265,7 @@
                                         <span class="fa fa-exclamation-triangle" style="color:red;font-size:2em;"></span>
                                         <#assign RCIDanger = RCIDanger + 1>
                                 </#if>
-                                </a>                                
+                                </a>
                                 ${nb}
                                 <#recover>
                                 Not found
@@ -338,27 +312,20 @@
                                 </#if>
                             </a>
                         </td>
-                        <td>
-                            <#if fixed gt 0 && unresolved == 0>
-                                <span class="hidden">1</span>
-                                <a href="https://dev.lutece.paris.fr/site-release/">
-                                    <img src="images/skin/plugins/lutecetools/release.png" title="Release" alt="release" width="24" height="24">
-                                </a>
-                            <#else>
-                                <span class="hidden">0</span>
+                        <td class="small">
+                            <#if component.attributes.jenkinsJobBadgeIconUrl??>
+                        	    <img src="${component.attributes.jenkinsJobBadgeIconUrl}" alt="status">
                             </#if>
                         </td>
-                        <td class="small">
-                            <span class="hidden">${component.attributes.jenkinsStatus!''}</span> 
-                            <a href="${component.attributes.jenkinsJobBuildUrl!''}"><img src="${component.attributes.jenkinsJobBadgeIconUrl!''}"></a>
-                        </td>
                         <td>
-                            <a href="https://dev.lutece.paris.fr/jira/projects/${component.attributes.jiraKey!''}" title="JIRA">
-                                <img src="images/skin/plugins/lutecetools/jira.png" alt="Jira logo" width="24" height="24"/>
-                            </a>
+                            <#if component.attributes.jiraKey?has_content && component.attributes.jiraKey != "N/A">
+                                <a href="https://dev.lutece.paris.fr/bugtracker/projects/${component.attributes.jiraKey!?lower_case}" title="REDMINE">
+                                    <img src="images/skin/plugins/lutecetools/redmine.png" alt="Redmine logo" width="24" height="24"/>
+                                </a>
+                            </#if>
                             <a href="http://dev.lutece.paris.fr/plugins/${component.artifactId}/index.html" title="English" class="btn btn-default btn-xs">en</a>
                             <a href="http://dev.lutece.paris.fr/plugins/${component.artifactId}/fr/index.html" title="French" class="btn btn-default btn-xs">&nbsp;fr&nbsp;</a>
-                            <a href="http://dev.lutece.paris.fr/maven_repository/fr/paris/lutece/plugins/${component.artifactId}" title="Maven repository" class="btn btn-default btn-xs">
+                            <a href="http://dev.lutece.paris.fr/nexus/service/rest/repository/browse/maven_repository/fr/paris/lutece/plugins/${component.artifactId}" title="Maven repository" class="btn btn-default btn-xs">
                                 <span class="fa fa-folder-open"></span>
                             </a>
                         </td>
@@ -397,12 +364,6 @@
                             <span class="badge"> ${jiraDanger} </span> <br>
                         </div>
                         <div class="col-md-2">
-                            <img src="images/skin/plugins/lutecetools/readme-green.png" alt="Readme status GREEN" width="20" height="20">
-                            <span class="badge"> ${readmeOk} </span> <br>
-                            <img src="images/skin/plugins/lutecetools/readme-red.png" alt="Readme status RED" width="20" height="20">
-                            <span class="badge"> ${readmeDanger} </span> <br>
-                        </div>
-                        <div class="col-md-2">
                             <span class="fa fa-check-circle" style="color:#00b300;font-size:1.1em;"></span>
                             <span class="badge"> ${RCIOk} </span> <br>
                             <span class="fa fa-exclamation-circle" style="color:orange;"></span>
@@ -423,14 +384,11 @@
                                 </div>
                             </form>
                         </div>
-                    </div>		            
+                    </div>
                     <br />
                 </tboby>
             </table>
         </div>
-    </div>
-    <div class="form-group" >
-        <textarea  class="form-control">${logs}</textarea>
     </div>
     <input type="hidden" id="valGithubGreen" value="${githubOk}">
     <input type="hidden" id="valGithubOrange" value="${githubWarning}">
@@ -441,33 +399,42 @@
     <input type="hidden" id="valJiraGreen" value="${jiraOk}">
     <input type="hidden" id="valJiraOrange" value="${jiraWarning}">
     <input type="hidden" id="valJiraRed" value="${jiraDanger}">
-    <input type="hidden" id="valReadmeGreen" value="${readmeOk}">
-    <input type="hidden" id="valReadmeRed" value="${readmeDanger}">
     <input type="hidden" id="valRCIGreen" value="${RCIOk}">
     <input type="hidden" id="valRCIOrange" value="${RCIWarning}">
     <input type="hidden" id="valRCIRed" value="${RCIDanger}">
 </div>
 </div>
 <script>
-$(document).ready(function(){
-    
-  // Remove the container class to use the full width
-  $( "div" ).removeClass( "container" );
-  
-  // Refresh the page every 30s
-  var time = new Date().getTime();
-  $(document.body).bind("mousemove keypress", function(e) {
-    time = new Date().getTime();
-  });
+$(document).ready(function() {
+    // Remove the container class to use the full width
+    $("div").removeClass("container");
 
-  function refresh() {
-    if(new Date().getTime() - time >= 30000 && ${components_list.percentAvailable} < 100)
-      window.location.reload(true);
-    else
-      setTimeout(refresh, 10000);
-  }
-  setTimeout(refresh, 10000);
-  $("#components-table").tablesorter();
-  }
-);
+    // Toggle extra branches display
+    $(".see-more").on("click", function() {
+        const extraBranches = $(this).prev(".extra-branches");
+        if (extraBranches.is(":visible")) {
+            extraBranches.hide();
+            $(this).text('${i18n("lutecetools.components.branches.seeMore")}');
+        } else {
+            extraBranches.show();
+            $(this).text('${i18n("lutecetools.components.branches.seeLess")}');
+        }
+    });
+
+    // Refresh the page every 30s
+    var time = new Date().getTime();
+    $(document.body).bind("mousemove keypress", function(e) {
+        time = new Date().getTime();
+    });
+
+    function refresh() {
+        if(new Date().getTime() - time >= 30000 && ${components_list.percentAvailable} < 100)
+            window.location.reload(true);
+        else
+            setTimeout(refresh, 10000);
+    }
+    setTimeout(refresh, 10000);
+    $("#components-table").tablesorter();
+});
+
 </script>

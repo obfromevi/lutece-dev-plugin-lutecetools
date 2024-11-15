@@ -100,9 +100,6 @@ definitions:
       jiraOK:
         type: integer
         description: The number of components with a valid Jira configuration.
-      readmeOK:
-        type: integer
-        description: The number of components with a valid GitHub Readme file.
   Error:
     type: object
     properties:
