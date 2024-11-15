@@ -120,30 +120,28 @@ public class GitHubService extends AbstractGitPlatformService
             component.set( GIT_PLATFORM, getGitPlatform( ) );
             Map<String, GHBranch> mapBranches = repo.getBranches( );
             List<String> listBranches = new ArrayList<>( );
+            List<String> extraBranches = new ArrayList<>( );
 
             for ( String strBranch : mapBranches.keySet( ) )
             {
-                listBranches.add( strBranch );
+                if ( "master".equals( strBranch ) || "develop".equals( strBranch ) )
+                {
+                    listBranches.add( strBranch );
+                }
+                else
+                {
+                    extraBranches.add( strBranch );
+                }
             }
 
             component.set( BRANCHES_LIST, listBranches );
+            component.set( EXTRA_BRANCHES, extraBranches );
+            component.set( HAS_EXTRA_BRANCHES, !extraBranches.isEmpty( ) );
         }
-        catch ( Exception ex )
+        catch( Exception ex )
         {
-            sbLogs.append( "\n*** ERROR *** Retrieving GitHub infos (branches , readme, ...) for component " )
-                    .append( component.getArtifactId( ) ).append( " : " ).append( ex.getMessage( ) );
-        }
-        try
-        {
-            repo.getReadme( );
-            component.set( HAS_README, true );
-        }
-        catch ( Exception e )
-        {
-            if ( e instanceof FileNotFoundException )
-            {
-                component.set( HAS_README, false );
-            }
+            sbLogs.append( "\n*** ERROR *** Retrieving GitHub infos (branches, pull request ...) for component " ).append( component.getArtifactId( ) )
+                    .append( " : " ).append( ex.getMessage( ) );
         }
         try
         {
@@ -159,10 +157,10 @@ public class GitHubService extends AbstractGitPlatformService
             }
             component.set( OLDEST_PULL_REQUEST, oldest );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            sbLogs.append( "\n*** ERROR *** Retreiving Github pull requests for component " )
-                    .append( component.getArtifactId( ) ).append( " : " ).append( e.getMessage( ) );
+            sbLogs.append( "\n*** ERROR *** Retreiving Github pull requests for component " ).append( component.getArtifactId( ) ).append( " : " )
+                    .append( e.getMessage( ) );
         }
         fillGitHubStatus( component );
         fillGitHubErrors( component );
@@ -210,10 +208,9 @@ public class GitHubService extends AbstractGitPlatformService
                 GHOrganization organization = github.getOrganization( strOrganization );
                 mapRepositories.putAll( organization.getRepositories( ) );
                 int nSize = organization.getRepositories( ).size( );
-                AppLogService.info( "LuteceTools : GitHub Service initialized - " + nSize
-                        + " repositories found for organization " + strOrganization );
+                AppLogService.info( "LuteceTools : GitHub Service initialized - " + nSize + " repositories found for organization " + strOrganization );
             }
-            catch ( IOException ex )
+            catch( IOException ex )
             {
                 AppLogService.error( "LuteceTools : Unable to access GitHub repositories", ex );
             }
@@ -223,9 +220,10 @@ public class GitHubService extends AbstractGitPlatformService
 
     /**
      * Gets a GitHub object to request repositories
-     * 
+     *
      * @return GitHub object
-     * @throws IOException if an exception occurs
+     * @throws IOException
+     *         if an exception occurs
      */
     private static GitHub getGitHub( ) throws IOException
     {
@@ -257,7 +255,8 @@ public class GitHubService extends AbstractGitPlatformService
     /**
      * Returns GitHub errors
      *
-     * @param component The component
+     * @param component
+     *         The component
      */
     private void fillGitHubErrors( Component component )
     {
@@ -279,14 +278,12 @@ public class GitHubService extends AbstractGitPlatformService
 
             if ( !_strParentPomVersion.equals( component.get( Component.PARENT_POM_VERSION ) ) )
             {
-                sbErrors.append( "Bad parent POM in release POM. should be global-pom version " )
-                        .append( _strParentPomVersion ).append( '\n' );
+                sbErrors.append( "Bad parent POM in release POM. should be global-pom version " ).append( _strParentPomVersion ).append( '\n' );
             }
 
             if ( !_strParentPomVersion.equals( component.get( Component.SNAPSHOT_PARENT_POM_VERSION ) ) )
             {
-                sbErrors.append( "Bad parent POM in snapshot POM. should be global-pom version " )
-                        .append( _strParentPomVersion ).append( '\n' );
+                sbErrors.append( "Bad parent POM in snapshot POM. should be global-pom version " ).append( _strParentPomVersion ).append( '\n' );
             }
 
             List listBranches = (List) component.getObject( BRANCHES_LIST );
@@ -302,7 +299,8 @@ public class GitHubService extends AbstractGitPlatformService
     /**
      * Calculate GitHub status
      *
-     * @param component The component
+     * @param component
+     *         The component
      */
     private void fillGitHubStatus( Component component )
     {
@@ -336,7 +334,8 @@ public class GitHubService extends AbstractGitPlatformService
     /**
      * fill site infos from xdoc site index
      *
-     * @param component The component
+     * @param component
+     *         The component
      */
     private void fillSiteInfos( Component component, StringBuilder sbLogs )
     {

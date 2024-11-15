@@ -40,12 +40,13 @@ public abstract class AbstractGitPlatformService implements ComponentInfoFiller
 {
     public static final String GIT_PLATFORM = "gitPlatform";
     public static final String GIT_GROUP = "gitGroup";
-    public static final String HAS_README = "hasReadme";
     public static final String PULL_REQUEST_COUNT = "pullRequests";
     public static final String GIT_REPO_ERRORS = "gitRepoErrors";
     public static final String GIT_REPO_STATUS = "gitRepoStatus";
     public static final String OLDEST_PULL_REQUEST = "oldestPullRequest";
     public static final String BRANCHES_LIST = "branchesList";
+    public static final String EXTRA_BRANCHES = "extraBranches";
+    public static final String HAS_EXTRA_BRANCHES = "hasExtraBranches";
 
     private String _strGitPlatform;
     private int _nItemCount;
@@ -65,7 +66,7 @@ public abstract class AbstractGitPlatformService implements ComponentInfoFiller
      * Sets the GitPlatform
      *
      * @param strGitPlatform
-     *            The GitPlatform
+     *         The GitPlatform
      */
     public void setGitPlatform( String strGitPlatform )
     {
@@ -86,7 +87,7 @@ public abstract class AbstractGitPlatformService implements ComponentInfoFiller
      * Sets the ItemCount
      *
      * @param nItemCount
-     *            The ItemCount
+     *         The ItemCount
      */
     public void setItemCount( int nItemCount )
     {
@@ -107,7 +108,7 @@ public abstract class AbstractGitPlatformService implements ComponentInfoFiller
      * Sets the ItemOk
      *
      * @param nItemOk
-     *            The ItemOk
+     *         The ItemOk
      */
     public void setItemOk( int nItemOk )
     {
