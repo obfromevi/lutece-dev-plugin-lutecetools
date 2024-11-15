@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.lutecetools.business.Stats;
 import fr.paris.lutece.plugins.lutecetools.service.StatsService;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.util.xml.XmlUtil;
+
 import java.io.IOException;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -50,10 +51,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- *
  * @author pierre
  */
 @Path( RestConstants.BASE_PATH + Constants.PATH_PLUGIN + Constants.PATH_STATS )
@@ -64,7 +65,6 @@ public class StatsRest
     private static final String KEY_GITHUB_COUNT = "github-count";
     private static final String KEY_GITHUB_OK = "github-ok";
     private static final String KEY_JIRA_OK = "jira-ok";
-    private static final String KEY_README_OK = "readme-ok";
 
     private static final ObjectMapper _mapper = new ObjectMapper( );
 
@@ -117,7 +117,6 @@ public class StatsRest
         XmlUtil.addElement( sbXML, KEY_GITHUB_COUNT, stats.getGithubCount( ) );
         XmlUtil.addElement( sbXML, KEY_GITHUB_OK, stats.getGithubOK( ) );
         XmlUtil.addElement( sbXML, KEY_JIRA_OK, stats.getJiraOK( ) );
-        XmlUtil.addElement( sbXML, KEY_README_OK, stats.getReadmeOK( ) );
         XmlUtil.endElement( sbXML, KEY_STATS );
 
         return sbXML.toString( );

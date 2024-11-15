@@ -44,10 +44,10 @@ public class StatsService
     private StatsService( )
     {
     }
-    
+
     /**
      * Build stats
-     * 
+     *
      * @return The stats
      */
     public static Stats getStats( )
@@ -57,7 +57,6 @@ public class StatsService
         int nGithubCount = 0;
         int nGithubOK = 0;
         int nJiraOK = 0;
-        int nReadmeOk = 0;
         for ( Component component : ci.getListComponents( ) )
         {
             if ( component.getInt( AbstractGitPlatformService.GIT_REPO_STATUS ) > 0 )
@@ -72,16 +71,11 @@ public class StatsService
             {
                 nJiraOK++;
             }
-            if ( Boolean.TRUE.equals( component.getBoolean( AbstractGitPlatformService.HAS_README ) ) )
-            {
-                nReadmeOk++;
-            }
         }
         stats.setMavenCount( ci.getComponentCount( ) );
         stats.setGithubCount( nGithubCount );
         stats.setGithubOK( nGithubOK );
         stats.setJiraOK( nJiraOK );
-        stats.setReadmeOK( nReadmeOk );
         return stats;
     }
 
