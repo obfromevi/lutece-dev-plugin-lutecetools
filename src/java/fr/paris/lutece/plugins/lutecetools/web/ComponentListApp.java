@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.lutecetools.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -92,6 +93,7 @@ public class ComponentListApp extends MVCApplication
     private static final String PLATFORM_GITHUB = "github";
     private static final String PLATFORM_GITLAB = "gitlab";
     private static final long serialVersionUID = 1L;
+    private static final String LUTECE_CORE = "lutece-core";
 
     // RCI color mark
     private static final String PROPERTY_SONAR_RCI_SUCCESS = "lutecetools.sonar.mark.rci.success";
@@ -133,6 +135,24 @@ public class ComponentListApp extends MVCApplication
         if ( !listFilterPlatform.isEmpty( ) )
         {
             ciInfos.setListComponents( filterPlatform( ciInfos.getListComponents( ), listFilterPlatform ) );
+        }
+
+        Iterator<Component> iterator = ciInfos.getListComponents( ).iterator( );
+        Component luteceCoreComponent = null;
+        while ( iterator.hasNext( ) )
+        {
+            Component component = iterator.next( );
+            if ( LUTECE_CORE.equals( component.getArtifactId( ) ) )
+            {
+                luteceCoreComponent = component;
+                iterator.remove();
+                break;
+            }
+        }
+
+        if ( luteceCoreComponent != null )
+        {
+            ciInfos.getListComponents( ).add( 0, luteceCoreComponent );
         }
 
         // FIXME
